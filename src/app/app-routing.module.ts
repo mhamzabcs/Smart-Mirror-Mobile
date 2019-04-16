@@ -6,6 +6,10 @@ const routes: Routes = [
   { path: 'home', loadChildren: './home/home.module#HomePageModule' },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'reminders', loadChildren: './reminders/reminders.module#RemindersPageModule' },
+  { path: 'register', loadChildren: './register/register.module#RegisterPageModule' },
+  { path: 'list-reminders', loadChildren: './list-reminders/list-reminders.module#ListRemindersPageModule' },
+  { path: 'edit-reminder', loadChildren: './edit-reminder/edit-reminder.module#EditReminderPageModule' },
+  { path: 'add-reminder', loadChildren: './add-reminder/add-reminder.module#AddReminderPageModule' },
 ];
 
 @NgModule({

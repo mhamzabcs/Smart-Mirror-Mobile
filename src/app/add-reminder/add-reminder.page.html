@@ -1,0 +1,18 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-title>reminders</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-item>
+		<ion-label>Description</ion-label>
+		<ion-input [(ngModel)]="text" type="text" placeholder="Reminder about"></ion-input>
+	</ion-item>
+
+	<ion-item>
+		<ion-label>Date</ion-label>
+		<ion-datetime [(ngModel)]="date" display-format="DD/MM/YYYY" picker-format="DD MMMM YYYY" [min]="myDate" max="2020-10-31"></ion-datetime>
+	</ion-item>
+	<ion-button expand="block" (click)='addReminder(text, date);'>Add Reminder</ion-button>
+</ion-content>

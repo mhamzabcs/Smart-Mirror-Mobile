@@ -25,9 +25,6 @@ export class LoginPage implements OnInit {
 	}
 
 	signIn(username, password) {
-		console.log('no');
-		console.log(username);
-		console.log(password);
 		let body = {
 			username: username,
 			password: password
