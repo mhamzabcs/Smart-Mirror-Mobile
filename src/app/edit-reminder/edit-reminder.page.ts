@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { AlertController } from '@ionic/angular';
+import { AlertController, Events } from '@ionic/angular';
+
 @Component({
 	selector: 'app-edit-reminder',
 	templateUrl: './edit-reminder.page.html',
@@ -13,7 +14,7 @@ export class EditReminderPage implements OnInit {
 	date = null;
 	myDate: String = new Date().toISOString();
 
-	constructor(public http: HttpClient, private activatedRoute: ActivatedRoute, private router: Router, public alertController: AlertController) {
+	constructor(public http: HttpClient, private activatedRoute: ActivatedRoute, private router: Router, public alertController: AlertController, public events: Events) {
 		this.activatedRoute.queryParams.subscribe(params => {
 			this.id = params['id'];
 			this.getReminder();
@@ -28,7 +29,7 @@ export class EditReminderPage implements OnInit {
 		const body = {
 			id: this.id
 		}
-		this.http.post('https://apes427.herokuapp.com/mobile/getOneReminder', body).subscribe((response) => {
+		this.http.post('http://127.0.0.1:5000/mobile/getOneReminder', body).subscribe((response) => {
 			console.log(response);
 			this.description = response[0].description;
 			this.date = response[0].date;
@@ -39,11 +40,13 @@ export class EditReminderPage implements OnInit {
 		const body = {
 			id: this.id,
 			description: description,
-			date: date
+			date: date,
+			prevDescription: this.description
 		}
-		this.http.post('https://apes427.herokuapp.com/mobile/editReminder', body).subscribe((response) => {
+		this.http.post('http://127.0.0.1:5000/mobile/editReminder', body).subscribe((response) => {
 			console.log(response);
 			this.presentAlert(response["msg"]);
+			this.events.publish('reminder:edit');
 		});
 	}
 

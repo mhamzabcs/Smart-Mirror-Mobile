@@ -10,6 +10,8 @@ const routes: Routes = [
   { path: 'list-reminders', loadChildren: './list-reminders/list-reminders.module#ListRemindersPageModule' },
   { path: 'edit-reminder', loadChildren: './edit-reminder/edit-reminder.module#EditReminderPageModule' },
   { path: 'add-reminder', loadChildren: './add-reminder/add-reminder.module#AddReminderPageModule' },
+  { path: 'list-alarms', loadChildren: './list-alarms/list-alarms.module#ListAlarmsPageModule' },
+
 ];
 
 @NgModule({

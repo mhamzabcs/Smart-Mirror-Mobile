@@ -10,7 +10,7 @@ import { AlertController } from '@ionic/angular';
 	styleUrls: ['./reminders.page.scss'],
 })
 export class RemindersPage implements OnInit {
-	myDate: String = new Date().toISOString();
+	//myDate: String = new Date().toISOString();
 	username = null;
 	constructor(public http: HttpClient, private storage: Storage, private router: Router, public alertController: AlertController) {
 		storage.get('username').then((val) => {
@@ -27,25 +27,4 @@ export class RemindersPage implements OnInit {
 	ngOnInit() {
 	}
 
-	addReminder(text, date) {
-		console.log(text);
-		console.log(date);
-		let body = {
-			text: text,
-			date: date,
-			username: this.username
-		};
-		this.http.post('https://apes427.herokuapp.com/mobile/addReminder', body).subscribe((response) => {
-			this.presentAlert(response["msg"]);
-		});
-	}
-
-	async presentAlert(message) {
-		const alert = await this.alertController.create({
-			header: 'Alert',
-			message: message,
-			buttons: ['OK']
-		});
-		await alert.present();
-	}
 }

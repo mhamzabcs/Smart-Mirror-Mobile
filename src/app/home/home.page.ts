@@ -3,6 +3,7 @@ import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AlertController } from '@ionic/angular';
+import * as io from 'socket.io-client';
 
 @Component({
 	selector: 'app-home',
@@ -10,6 +11,7 @@ import { AlertController } from '@ionic/angular';
 	styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+	socket:any;
 	username = null;
 	constructor(public http: HttpClient, private storage: Storage, private router: Router, public alertController: AlertController) {
 		console.log('hehe');
@@ -22,19 +24,23 @@ export class HomePage {
 				this.username = val;
 			}
 		});
+		this.socket = io('http://127.0.0.1:5000');
+		this.socket.on('response', (resp) => {
+			this.presentAlert(resp);
+		});
 	}
 
-	Login() {
+	login() {
+		console.log('logging in');
 		let body = {
 			username: this.username
 		};
-		this.http.post('https://apes427.herokuapp.com/mobile/login', body).subscribe((response) => {
-			this.presentAlert(response["msg"]);
+		this.http.post('http://127.0.0.1:5000/mobile/login', body).subscribe(() => {
 		});
 	}
-	Logout() {
-		this.http.get('https://apes427.herokuapp.com/mobile/logout').subscribe((response) => {
-			this.presentAlert(response["msg"]);
+	logout() {
+		console.log('logging out');
+		this.http.get('http://127.0.0.1:5000/mobile/logout').subscribe(() => {
 		});
 	}
 

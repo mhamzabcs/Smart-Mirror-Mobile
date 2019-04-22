@@ -1,6 +1,6 @@
 <ion-header>
 	<ion-toolbar>
-		<ion-title>listReminders</ion-title>
+		<ion-title>List of Reminders</ion-title>
 	</ion-toolbar>
 </ion-header>
 
@@ -9,7 +9,7 @@
 		<ion-item *ngFor="let reminder of reminderList">
 			<ion-label>{{ reminder.description }} ({{  reminder.date | date: 'dd/MM/yyyy'  }})</ion-label>
 			<ion-button color="light" (click)='edit(reminder._id);'>Modify</ion-button>
-			<ion-button color="danger" (click)='delete(reminder._id);'>delete</ion-button>
+			<ion-button color="danger" (click)='delete(reminder._id);'>Delete</ion-button>
 		</ion-item>
 	</ion-list>
 </ion-content>

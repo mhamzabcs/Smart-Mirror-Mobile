@@ -1,15 +1,16 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Home
+      Smart Mirror Interactions
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="ion-padding">
-    <ion-button expand="block" (click)='Login();'>Log in</ion-button>
-    <ion-button expand="block" (click)='Logout();'>Log Out</ion-button>
-    <ion-button expand="block" routerLink="/reminders">reminders</ion-button>
+    <ion-button expand="block" (click)='login();'>Log into your Smart Mirror</ion-button>
+    <ion-button expand="block" (click)='logout();'>Log Out of your Smart Mirror</ion-button>
+    <ion-button expand="block" routerLink="/reminders">Reminders' Options</ion-button>
+    <ion-button expand="block" routerLink="/list-alarms">Alarms' Options</ion-button>
   </div>
 </ion-content>
