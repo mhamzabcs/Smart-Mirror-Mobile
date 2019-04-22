@@ -31,7 +31,7 @@ export class ListRemindersPage implements OnInit {
 		const body = {
 			username: this.username
 		}
-		this.http.post('http://127.0.0.1:5000/mobile/getReminders', body).subscribe((response) => {
+		this.http.post('https://apes427.herokuapp.com/mobile/getReminders', body).subscribe((response) => {
 			console.log(response);
 			if (response['msg'] == "no reminders") {
 				console.log('here')
@@ -48,7 +48,7 @@ export class ListRemindersPage implements OnInit {
 		const body = {
 			id: id
 		}
-		this.http.post('http://127.0.0.1:5000/mobile/deleteReminder', body).subscribe((response) => {
+		this.http.post('https://apes427.herokuapp.com/mobile/deleteReminder', body).subscribe((response) => {
 			console.log(response);
 			this.reminderList = response;
 			if (response["msg"] == "reminder removed") {

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class LoginPage implements OnInit {
 	status = null;
 	username = null;
+
 	constructor(public http: HttpClient, public storage: Storage, public router: Router) {
 		console.log('hehe');
 		storage.get('username').then((val) => {
@@ -22,6 +23,7 @@ export class LoginPage implements OnInit {
 	}
 
 	ngOnInit() {
+		console.log('yoolloolo');
 	}
 
 	signIn(username, password) {

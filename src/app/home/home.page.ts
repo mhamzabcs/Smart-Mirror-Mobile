@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AlertController } from '@ionic/angular';
 import * as io from 'socket.io-client';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+
 
 @Component({
 	selector: 'app-home',
@@ -11,9 +13,9 @@ import * as io from 'socket.io-client';
 	styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-	socket:any;
+	socket: any;
 	username = null;
-	constructor(public http: HttpClient, private storage: Storage, private router: Router, public alertController: AlertController) {
+	constructor(public http: HttpClient, private storage: Storage, private router: Router, public alertController: AlertController, public localNotifications: LocalNotifications) {
 		console.log('hehe');
 		storage.get('username').then((val) => {
 			console.log(val);
@@ -24,9 +26,45 @@ export class HomePage {
 				this.username = val;
 			}
 		});
-		this.socket = io('http://127.0.0.1:5000');
+		this.socket = io('https://apes427.herokuapp.com');
 		this.socket.on('response', (resp) => {
 			this.presentAlert(resp);
+		});
+	}
+
+	ngOnInit() {
+		console.log('settign alarms');
+		this.localNotifications.schedule({
+			title: 'alarm',
+			text: 'nobody cares',
+			trigger: {
+				every: {
+					weekday: 1,
+					hour: 16,
+					minute: 43,
+				},
+				count: 365,
+			},
+			actions: [
+				{ id: 'dismiss', title: 'dismiss' },
+				{ id: 'snooze', title: 'snooze' }
+			]
+		});
+		this.localNotifications.on('snooze').subscribe(res => {
+			console.log('snooze');
+			this.localNotifications.schedule({
+				title: 'alarm',
+				text: 'nobody cares',
+				trigger: { at: new Date(new Date().getTime() + 300000) },
+				actions: [
+					{ id: 'dismiss', title: 'dismiss' },
+					{ id: 'snooze', title: 'snooze' }
+				]
+			});
+		});
+		this.localNotifications.on('dismiss').subscribe(res => {
+			console.log('dismiss');
+			console.log(res);
 		});
 	}
 
@@ -35,12 +73,12 @@ export class HomePage {
 		let body = {
 			username: this.username
 		};
-		this.http.post('http://127.0.0.1:5000/mobile/login', body).subscribe(() => {
+		this.http.post('https://apes427.herokuapp.com/mobile/login', body).subscribe(() => {
 		});
 	}
 	logout() {
 		console.log('logging out');
-		this.http.get('http://127.0.0.1:5000/mobile/logout').subscribe(() => {
+		this.http.get('https://apes427.herokuapp.com/mobile/logout').subscribe(() => {
 		});
 	}
 

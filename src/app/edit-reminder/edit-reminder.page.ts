@@ -29,7 +29,7 @@ export class EditReminderPage implements OnInit {
 		const body = {
 			id: this.id
 		}
-		this.http.post('http://127.0.0.1:5000/mobile/getOneReminder', body).subscribe((response) => {
+		this.http.post('https://apes427.herokuapp.com/mobile/getOneReminder', body).subscribe((response) => {
 			console.log(response);
 			this.description = response[0].description;
 			this.date = response[0].date;
@@ -43,7 +43,7 @@ export class EditReminderPage implements OnInit {
 			date: date,
 			prevDescription: this.description
 		}
-		this.http.post('http://127.0.0.1:5000/mobile/editReminder', body).subscribe((response) => {
+		this.http.post('https://apes427.herokuapp.com/mobile/editReminder', body).subscribe((response) => {
 			console.log(response);
 			this.presentAlert(response["msg"]);
 			this.events.publish('reminder:edit');
