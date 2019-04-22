@@ -47,8 +47,6 @@ export class ListAlarmsPage implements OnInit {
 		});
 	}
 	getAlarms() {
-
-
 		const body = {
 			username: this.username
 		}

@@ -15,6 +15,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 export class HomePage {
 	socket: any;
 	username = null;
+	alarmList = null;
 	constructor(public http: HttpClient, private storage: Storage, private router: Router, public alertController: AlertController, public localNotifications: LocalNotifications) {
 		console.log('hehe');
 		storage.get('username').then((val) => {
@@ -34,27 +35,51 @@ export class HomePage {
 
 	ngOnInit() {
 		console.log('settign alarms');
-		this.localNotifications.schedule({
-			title: 'alarm',
-			text: 'nobody cares',
-			trigger: {
-				every: {
-					weekday: 1,
-					hour: 16,
-					minute: 43,
-				},
-				count: 365,
-			},
-			actions: [
-				{ id: 'dismiss', title: 'dismiss' },
-				{ id: 'snooze', title: 'snooze' }
-			]
+		this.storage.get('username').then((val) => {
+			const body = {
+				username: val
+			}
+			this.http.post<any[]>('https://apes427.herokuapp.com/mobile/getAlarms', body).subscribe((response) => {
+				if (response['msg'] == "no alarms") {
+					this.alarmList = [];
+				}
+				else {
+					console.log('yolo swap');
+					var objArr = [];
+					response.forEach(function (obj, i) {
+						console.log(i);
+						var obj:any = {
+							id: i,
+							title: 'Alarm',
+							text: 'nobody cares',
+							trigger: {
+								every: {
+									weekday: obj.dayNumber,
+									hour: obj.hours,
+									minute: obj.minutes,
+								},
+								count: 365,
+							},
+							actions: [
+								{ id: 'dismiss', title: 'dismiss' },
+								{ id: 'snooze', title: 'snooze' }
+							]
+						}
+						objArr.push(obj);
+					});
+					console.log(objArr);
+					this.localNotifications.schedule(objArr);
+				}
+			});
 		});
+
 		this.localNotifications.on('snooze').subscribe(res => {
 			console.log('snooze');
+			console.log(res);
 			this.localNotifications.schedule({
+				id:3,
 				title: 'alarm',
-				text: 'nobody cares',
+				text: 'snoozy boy',
 				trigger: { at: new Date(new Date().getTime() + 300000) },
 				actions: [
 					{ id: 'dismiss', title: 'dismiss' },
