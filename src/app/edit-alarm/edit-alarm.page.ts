@@ -14,7 +14,7 @@ export class EditAlarmPage implements OnInit {
 	dayNumber = null;
 	hours = null;
 	minutes = null;
-	daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednsday', 'Thursday', 'Friday', 'Saturday']
+	daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 	constructor(public http: HttpClient, private activatedRoute: ActivatedRoute) {
 		this.activatedRoute.queryParams.subscribe(params => {
 			this.id = params['id'];
