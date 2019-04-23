@@ -18,7 +18,7 @@ export class ListAlarmsPage implements OnInit {
 		storage.get('username').then((val) => {
 			this.username = val;
 			this.getAlarms();
-			this.socket = io('http://127.0.0.1:5000');
+			this.socket = io('https://apes427.herokuapp.com');
 			this.socket.on(this.username+' alarms', (resp) => {
 				this.alarmList.push(resp);
 				console.log(this.alarmList);
@@ -76,7 +76,7 @@ export class ListAlarmsPage implements OnInit {
 		const body = {
 			username: this.username
 		}
-		this.http.post('http://127.0.0.1:5000/mobile/getAlarms', body).subscribe((response) => {
+		this.http.post('https://apes427.herokuapp.com/mobile/getAlarms', body).subscribe((response) => {
 			if (response['msg'] == "no alarms") {
 				this.alarmList = [];
 			}

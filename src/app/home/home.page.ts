@@ -26,7 +26,7 @@ export class HomePage {
 			else {
 				this.username = val;
 				console.log("user? "+this.username);
-				this.socket = io('http://127.0.0.1:5000');
+				this.socket = io('https://apes427.herokuapp.com');
 				this.socket.on(this.username, (resp) => {
 					this.presentAlert(resp);
 				});
@@ -44,7 +44,7 @@ export class HomePage {
 			const body = {
 				username: val
 			}
-			this.http.post<any[]>('http://127.0.0.1:5000/mobile/getAlarms', body).subscribe((response) => {
+			this.http.post<any[]>('https://apes427.herokuapp.com/mobile/getAlarms', body).subscribe((response) => {
 				if (response['msg'] == "no alarms") {
 					this.alarmList = [];
 				}
@@ -105,7 +105,7 @@ export class HomePage {
 		let body = {
 			username: this.username
 		};
-		this.http.post('http://127.0.0.1:5000/mobile/login', body).subscribe(() => {
+		this.http.post('https://apes427.herokuapp.com/mobile/login', body).subscribe(() => {
 		});
 	}
 
@@ -114,7 +114,7 @@ export class HomePage {
 		let body = {
 			username: this.username
 		};
-		this.http.post('http://127.0.0.1:5000/mobile/logout', body).subscribe(() => {
+		this.http.post('https://apes427.herokuapp.com/mobile/logout', body).subscribe(() => {
 		});
 	}
 

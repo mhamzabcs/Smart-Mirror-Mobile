@@ -32,7 +32,7 @@ export class LoginPage implements OnInit {
 			password: password
 		};
 		console.log(body);
-		this.http.post('http://localhost:5000/users/login', body).subscribe((response) => {
+		this.http.post('https://apes427.herokuapp.com/users/login', body).subscribe((response) => {
 			console.log(response);
 			if (response["status"] === 'success') {
 				this.storage.set('username', response["username"]);
