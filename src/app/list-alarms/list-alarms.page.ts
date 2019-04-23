@@ -3,6 +3,8 @@ import { Storage } from '@ionic/storage';
 import { HttpClient } from '@angular/common/http';
 import * as io from 'socket.io-client';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { Router, NavigationExtras } from '@angular/router';
+import { AlertController, Events } from '@ionic/angular';
 
 @Component({
 	selector: 'app-list-alarms',
@@ -14,7 +16,7 @@ export class ListAlarmsPage implements OnInit {
 	alarmList = null;
 	username = null;
 
-	constructor(public http: HttpClient, public storage: Storage, public localNotifications: LocalNotifications) {
+	constructor(public http: HttpClient, public storage: Storage,private router: Router, public localNotifications: LocalNotifications, public alertController: AlertController) {
 		storage.get('username').then((val) => {
 			this.username = val;
 			this.getAlarms();
@@ -34,7 +36,6 @@ export class ListAlarmsPage implements OnInit {
 		var obj:any = {
 			id: Math.random(),
 			title: 'Alarm',
-			text: 'someone cares',
 			trigger: {
 				every: {
 					weekday: obj.dayNumber,
@@ -56,7 +57,6 @@ export class ListAlarmsPage implements OnInit {
 			this.localNotifications.schedule({
 				id:3,
 				title: 'alarm',
-				text: 'snoozy boy',
 				trigger: { at: new Date(new Date().getTime() + 300000) },
 				actions: [
 					{ id: 'dismiss', title: 'dismiss' },
@@ -84,6 +84,44 @@ export class ListAlarmsPage implements OnInit {
 				this.alarmList = response;
 				console.log(response);
 
+			}
+		});
+	}
+
+	delete(id) {
+		const body = {
+			id: id
+		}
+		this.http.post('https://apes427.herokuapp.com/mobile/deleteAlarm', body).subscribe((response) => {
+			console.log(response);
+			this.alarmList = response;
+			if (response["msg"] == "alarm removed") {
+				// reminder remove kar deta bus yeh reminder reminderlist se bhi remove kara k show kar de
+				this.presentAlert(response["msg"]);
+				this.getAlarms();
+			}
+		});
+	}
+
+	async presentAlert(message) {
+		const alert = await this.alertController.create({
+			header: 'Alert',
+			message: message,
+			buttons: ['OK']
+		});
+		await alert.present();
+	}
+
+	edit(id) {
+		console.log('heere = ' + id);
+		let navigationExtras: NavigationExtras = {
+			state: {
+				id: id
+			}
+		};
+		this.router.navigate(['/edit-alarm'], {
+			queryParams: {
+				id: id
 			}
 		});
 	}

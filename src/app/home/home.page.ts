@@ -56,7 +56,6 @@ export class HomePage {
 						var obj:any = {
 							id: i,
 							title: 'Alarm',
-							text: 'nobody cares',
 							trigger: {
 								every: {
 									weekday: obj.dayNumber,
@@ -83,8 +82,7 @@ export class HomePage {
 			console.log(res);
 			this.localNotifications.schedule({
 				id:3,
-				title: 'alarm',
-				text: 'snoozy boy',
+				title: 'Alarm',
 				trigger: { at: new Date(new Date().getTime() + 300000) },
 				actions: [
 					{ id: 'dismiss', title: 'dismiss' },
