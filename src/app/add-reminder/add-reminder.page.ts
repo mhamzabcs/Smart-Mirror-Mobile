@@ -37,7 +37,7 @@ export class AddReminderPage implements OnInit {
 			date: date,
 			username: this.username
 		};
-		this.http.post('https://apes427.herokuapp.com/mobile/addReminder', body).subscribe((response) => {
+		this.http.post('http://127.0.0.1:5000/mobile/addReminder', body).subscribe((response) => {
 			this.presentAlert(response["msg"]);
 		});
 	}

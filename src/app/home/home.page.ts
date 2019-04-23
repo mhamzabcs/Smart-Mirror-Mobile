@@ -25,21 +25,26 @@ export class HomePage {
 			}
 			else {
 				this.username = val;
+				console.log("user? "+this.username);
+				this.socket = io('http://127.0.0.1:5000');
+				this.socket.on(this.username, (resp) => {
+					this.presentAlert(resp);
+				});
 			}
-		});
-		this.socket = io('https://apes427.herokuapp.com');
-		this.socket.on('response', (resp) => {
-			this.presentAlert(resp);
 		});
 	}
 
 	ngOnInit() {
-		console.log('settign alarms');
+		
+	}
+
+	setAlarms(){
+		console.log('setting alarms');
 		this.storage.get('username').then((val) => {
 			const body = {
 				username: val
 			}
-			this.http.post<any[]>('https://apes427.herokuapp.com/mobile/getAlarms', body).subscribe((response) => {
+			this.http.post<any[]>('http://127.0.0.1:5000/mobile/getAlarms', body).subscribe((response) => {
 				if (response['msg'] == "no alarms") {
 					this.alarmList = [];
 				}
@@ -87,10 +92,12 @@ export class HomePage {
 				]
 			});
 		});
+
 		this.localNotifications.on('dismiss').subscribe(res => {
 			console.log('dismiss');
 			console.log(res);
 		});
+		
 	}
 
 	login() {
@@ -98,12 +105,16 @@ export class HomePage {
 		let body = {
 			username: this.username
 		};
-		this.http.post('https://apes427.herokuapp.com/mobile/login', body).subscribe(() => {
+		this.http.post('http://127.0.0.1:5000/mobile/login', body).subscribe(() => {
 		});
 	}
+
 	logout() {
 		console.log('logging out');
-		this.http.get('https://apes427.herokuapp.com/mobile/logout').subscribe(() => {
+		let body = {
+			username: this.username
+		};
+		this.http.post('http://127.0.0.1:5000/mobile/logout', body).subscribe(() => {
 		});
 	}
 

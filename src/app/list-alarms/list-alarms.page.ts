@@ -18,39 +18,65 @@ export class ListAlarmsPage implements OnInit {
 		storage.get('username').then((val) => {
 			this.username = val;
 			this.getAlarms();
-		});
-		this.socket = io('https://apes427.herokuapp.com');
-		this.socket.on('alarms', (resp) => {
-			this.alarmList.push(resp);
-			console.log(this.alarmList);
+			this.socket = io('http://127.0.0.1:5000');
+			this.socket.on(this.username+' alarms', (resp) => {
+				this.alarmList.push(resp);
+				console.log(this.alarmList);
+				this.setAlarm(resp);
+			});
 		});
 	}
 
 	ngOnInit() {
-		console.log('adding notifi');
-		/* this.localNotifications.schedule({
-			text: 'ALARM',
-			trigger: { every: { weekday: 1, hour: 16, minute: 37} },
+	}
+
+	setAlarm(obj){
+		var obj:any = {
+			id: Math.random(),
+			title: 'Alarm',
+			text: 'someone cares',
+			trigger: {
+				every: {
+					weekday: obj.dayNumber,
+					hour: obj.hours,
+					minute: obj.minutes,
+				},
+				count: 365,
+			},
 			actions: [
 				{ id: 'dismiss', title: 'dismiss' },
 				{ id: 'snooze', title: 'snooze' }
 			]
-		}); */
-		
+		}
+		this.localNotifications.schedule(obj);
+
 		this.localNotifications.on('snooze').subscribe(res => {
 			console.log('snooze');
 			console.log(res);
+			this.localNotifications.schedule({
+				id:3,
+				title: 'alarm',
+				text: 'snoozy boy',
+				trigger: { at: new Date(new Date().getTime() + 300000) },
+				actions: [
+					{ id: 'dismiss', title: 'dismiss' },
+					{ id: 'snooze', title: 'snooze' }
+				]
+			});
 		});
+
 		this.localNotifications.on('dismiss').subscribe(res => {
 			console.log('dismiss');
 			console.log(res);
 		});
+
 	}
+
 	getAlarms() {
 		const body = {
 			username: this.username
 		}
-		this.http.post('https://apes427.herokuapp.com/mobile/getAlarms', body).subscribe((response) => {
+		this.http.post('http://127.0.0.1:5000/mobile/getAlarms', body).subscribe((response) => {
 			if (response['msg'] == "no alarms") {
 				this.alarmList = [];
 			}
