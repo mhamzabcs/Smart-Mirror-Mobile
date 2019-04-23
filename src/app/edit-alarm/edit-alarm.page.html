@@ -7,13 +7,13 @@
 <ion-content>
 	<ion-item>
 		<ion-label>time</ion-label>
-		<ion-datetime [(ngModel)]="time" display-format="HH:mm" picker-format="HH:mm"></ion-datetime>
+		<ion-datetime [(ngModel)]="time" display-format="hh:mm:a" picker-format="hh:mm:a"></ion-datetime>
 	</ion-item>
 	<ion-item>
 		<ion-label>Day</ion-label>
         <ion-select [(ngModel)]="selectedDay">
-            <ion-select-option [value]="day" *ngFor="let day of daysOfWeek">{{ day }}</ion-select-option>
+            <ion-select-option [value]="i" *ngFor="let day of daysOfWeek; let i = index">{{ day }}</ion-select-option>
         </ion-select>
     </ion-item>
-	<ion-button expand="block" (click)='editAlarm(time, selectedDay);'>edit reminder</ion-button>
+	<ion-button expand="block" (click)='editAlarm(time, selectedDay);'>edit alarm</ion-button>
 </ion-content>

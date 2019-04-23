@@ -40,8 +40,7 @@ export class EditReminderPage implements OnInit {
 		const body = {
 			id: this.id,
 			description: description,
-			date: date,
-			prevDescription: this.description
+			date: date
 		}
 		this.http.post('https://apes427.herokuapp.com/mobile/editReminder', body).subscribe((response) => {
 			console.log(response);

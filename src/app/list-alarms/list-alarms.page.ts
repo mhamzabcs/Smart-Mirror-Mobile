@@ -16,7 +16,7 @@ export class ListAlarmsPage implements OnInit {
 	alarmList = null;
 	username = null;
 
-	constructor(public http: HttpClient, public storage: Storage,private router: Router, public localNotifications: LocalNotifications, public alertController: AlertController) {
+	constructor(public http: HttpClient, public storage: Storage,private router: Router, public localNotifications: LocalNotifications, public alertController: AlertController, public events: Events) {
 		storage.get('username').then((val) => {
 			this.username = val;
 			this.getAlarms();
@@ -25,6 +25,10 @@ export class ListAlarmsPage implements OnInit {
 				this.alarmList.push(resp);
 				console.log(this.alarmList);
 				this.setAlarm(resp);
+			});
+			events.subscribe('alarm:edit', () => {
+		   		console.log('edit alarm triggered');
+		   		this.getAlarms();
 			});
 		});
 	}

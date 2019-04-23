@@ -18,7 +18,7 @@ export class ListRemindersPage implements OnInit {
 			this.username = val;
 			this.getReminders();
 			events.subscribe('reminder:edit', () => {
-		   		console.log('triggered');
+		   		console.log('edit reminder triggered');
 		   		this.getReminders();
 			});
 		});

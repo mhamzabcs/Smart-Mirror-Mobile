@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { AlertController, Events } from '@ionic/angular';
 
 @Component({
 	selector: 'app-edit-alarm',
@@ -15,7 +16,7 @@ export class EditAlarmPage implements OnInit {
 	hours = null;
 	minutes = null;
 	daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-	constructor(public http: HttpClient, private activatedRoute: ActivatedRoute) {
+	constructor(public http: HttpClient, private activatedRoute: ActivatedRoute, public alertController: AlertController, public events: Events) {
 		this.activatedRoute.queryParams.subscribe(params => {
 			this.id = params['id'];
 			this.getAlarm();
@@ -39,8 +40,40 @@ export class EditAlarmPage implements OnInit {
 		});
 	}
 
-	editAlarm(time, selectedDay){
+	editAlarm(selectedTime, selectedDay){
+		let d = new Date(selectedTime);
+		let date = this.daysOfWeek[selectedDay];
+		let time = d.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true}).toLowerCase();
+		let dayNumber = selectedDay;
+		let hours = d.getHours();
+		let minutes = d.getMinutes();
+		console.log(date)
 		console.log(time)
-		console.log(selectedDay)
+		console.log(dayNumber)
+		console.log(hours)
+		console.log(minutes)
+		const body = {
+			id: this.id,
+			day: date,
+			time: time,
+			dayNumber: dayNumber,
+			hours: hours,
+			minutes: minutes
+		}
+		this.http.post('http://localhost:5000/mobile/editAlarm', body).subscribe((response) => {
+			console.log(response);
+			this.presentAlert(response["msg"]);
+			this.events.publish('alarm:edit');
+		});
 	}
+
+	async presentAlert(message) {
+		const alert = await this.alertController.create({
+			header: 'Alert',
+			message: message,
+			buttons: ['OK']
+		});
+		await alert.present();
+	}
+
 }
