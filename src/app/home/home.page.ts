@@ -100,6 +100,17 @@ export class HomePage {
 		
 	}
 
+	refresh(){
+		this.http.get('https://apes427.herokuapp.com/mobile/refresh').subscribe(() => {
+		});
+	}
+
+	changeState(){
+		this.http.get('https://apes427.herokuapp.com/mobile/changeState').subscribe(() => {
+		});
+	}
+	
+
 	login() {
 		console.log('logging in');
 		let body = {
