@@ -60,7 +60,7 @@ export class EditAlarmPage implements OnInit {
 			hours: hours,
 			minutes: minutes
 		}
-		this.http.post('http://localhost:5000/mobile/editAlarm', body).subscribe((response) => {
+		this.http.post('https://apes427.herokuapp.com/mobile/editAlarm', body).subscribe((response) => {
 			console.log(response);
 			this.presentAlert(response["msg"]);
 			this.events.publish('alarm:edit');

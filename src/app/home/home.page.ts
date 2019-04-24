@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { AlertController } from '@ionic/angular';
+import { AlertController, Events } from '@ionic/angular';
 import * as io from 'socket.io-client';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
@@ -16,16 +16,19 @@ export class HomePage {
 	socket: any;
 	username = null;
 	alarmList = null;
-	constructor(public http: HttpClient, private storage: Storage, private router: Router, public alertController: AlertController, public localNotifications: LocalNotifications) {
-		console.log('hehe');
+	constructor(public http: HttpClient, private storage: Storage, private router: Router, public alertController: AlertController, public localNotifications: LocalNotifications, public events: Events) {
 		storage.get('username').then((val) => {
+			this.events.subscribe('alarm:edit', () => {
+				console.log('edit alarm triggered home page');
+				this.setAlarms();
+			})
 			console.log(val);
 			if (!val) {
 				this.router.navigate(['/login'])
 			}
 			else {
 				this.username = val;
-				console.log("user? "+this.username);
+				console.log("user? " + this.username);
 				this.socket = io('https://apes427.herokuapp.com');
 				this.socket.on(this.username, (resp) => {
 					this.presentAlert(resp);
@@ -35,12 +38,13 @@ export class HomePage {
 	}
 
 	ngOnInit() {
-		
+
 	}
 
-	setAlarms(){
+	setAlarms() {
 		console.log('setting alarms');
 		this.storage.get('username').then((val) => {
+			
 			const body = {
 				username: val
 			}
@@ -49,11 +53,10 @@ export class HomePage {
 					this.alarmList = [];
 				}
 				else {
-					console.log('yolo swap');
 					var objArr = [];
 					response.forEach(function (obj, i) {
 						console.log(i);
-						var obj:any = {
+						var obj: any = {
 							id: i,
 							title: 'Alarm',
 							trigger: {
@@ -81,7 +84,7 @@ export class HomePage {
 			console.log('snooze');
 			console.log(res);
 			this.localNotifications.schedule({
-				id:3,
+				id: 3,
 				title: 'Alarm',
 				trigger: { at: new Date(new Date().getTime() + 300000) },
 				actions: [
@@ -95,19 +98,19 @@ export class HomePage {
 			console.log('dismiss');
 			console.log(res);
 		});
-		
+
 	}
 
-	refresh(){
+	refresh() {
 		this.http.get('https://apes427.herokuapp.com/mobile/refresh').subscribe(() => {
 		});
 	}
 
-	changeState(){
+	changeState() {
 		this.http.get('https://apes427.herokuapp.com/mobile/changeState').subscribe(() => {
 		});
 	}
-	
+
 
 	login() {
 		console.log('logging in');
@@ -125,6 +128,11 @@ export class HomePage {
 		};
 		this.http.post('https://apes427.herokuapp.com/mobile/logout', body).subscribe(() => {
 		});
+	}
+
+	signOut(){
+		this.storage.set('username', null);
+		this.router.navigate(['/login'])
 	}
 
 	async presentAlert(message) {
